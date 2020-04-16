@@ -1,0 +1,120 @@
+-- CREATE TABLE code--------
+
+CREATE TABLE code(bcode VARCHAR(10), Librarian VARCHAR(30), address VARCHAR(30));
+INSERT INTO code VALUES('B1', 'John Smith', '2 Anglesea Rd');
+INSERT INTO code VALUES('B2', 'Mary Jones', '34 Pearse Rd');
+INSERT INTO code VALUES('B3', 'Francis Owens', 'Grange X');
+SELECT * FROM code;
+
+bcode | Librarian     | address       |
++-------+---------------+---------------+
+| B1    | John Smith    | 2 Anglesea Rd |
+| B2    | Mary Jones    | 34 Pearse Rd  |
+| B3    | Francis Owens | Grange X      |
++-------+---------------+---------------+
+3 rows in set (0.00 sec)
+
+--- CREATE TABLE titlename------
+
+CREATE TABLE titlename(title VARCHAR(30), author VARCHAR(30), publisher VARCHAR(30));
+INSERT INTO titlename VALUES('Susannah', 'Anne Brown', 'Macmillan');
+INSERT INTO titlename VALUES('How to Fish', 'Amy Fly', 'Stop Press');
+INSERT INTO titlename VALUES('A History of Dublin', 'David Little', 'Wiley');
+INSERT INTO titlename VALUES('Computers', 'Blaisse Pascal', 'Applewoods');
+INSERT INTO titlename VALUES('The wife', 'Anne Brown', 'Macmillan');
+SELECT * FROM titlename;
+
++---------------------+----------------+------------+
+| title               | author         | publisher  |
++---------------------+----------------+------------+
+| Susannah            | Anne Brown     | Macmillan  |
+| How to Fish         | Amy Fly        | Stop Press |
+| A History of Dublin | David Little   | Wiley      |
+| Computers           | Blaisse Pascal | Applewoods |
+| The wife            | Anne Brown     | Macmillan  |
++---------------------+----------------+------------+
+5 rows in set (0.00 sec)
+
+CREATE TABLE branchdetails(branch VARCHAR(30), title VARCHAR(30), copies INT(32));
+INSERT INTO branchdetails VALUES('B1', 'Susannah', 3);
+INSERT INTO branchdetails VALUES('B1', 'How to', 2);
+INSERT INTO branchdetails VALUES('B1', 'A hist', 1);
+INSERT INTO branchdetails VALUES('B2', 'How to', 4);
+INSERT INTO branchdetails VALUES('B2', 'Computers', 2);
+INSERT INTO branchdetails VALUES('B2', 'The Wife', 3);
+INSERT INTO branchdetails VALUES('B3', 'A hist', 1);
+INSERT INTO branchdetails VALUES('B3', 'Computers', 4);
+INSERT INTO branchdetails VALUES('B3', 'Susannah', 3);
+INSERT INTO branchdetails VALUES('B3', 'The Wife', 1);
+SELECT * FROM branchdetails;
+
++--------+-----------+--------+
+| branch | title     | copies |
++--------+-----------+--------+
+| B1     | Susannah  |      3 |
+| B1     | How to    |      2 |
+| B1     | A hist    |      1 |
+| B2     | How to    |      4 |
+| B2     | Computers |      2 |
+| B2     | The Wife  |      3 |
+| B3     | A hist    |      1 |
+| B3     | Computers |      4 |
+| B3     | Susannah  |      3 |
+| B3     | The Wife  |      1 |
++--------+-----------+--------+
+10 rows in set (0.00 sec)
+
+-- 1) the names of all library books published by Macmillan-----
+
+mysql> SELECT title FROM titlename WHERE publisher = 'Macmillan';
++----------+
+| title    |
++----------+
+| Susannah |
+| The wife |
++----------+
+2 rows in set (0.00 sec)
+
+
+-- 2) branches that hold any books by Ann Brown(using a nested subquery).
+
+
+mysql>  SELECT DISTINCT branch FROM branchdetails
+    ->  WHERE title IN (SELECT title FROM titlename where author = 'Anne Brown');
++--------+
+| branch |
++--------+
+| B1     |
+| B2     |
+| B3     |
++--------+
+3 rows in set (0.00 sec)
+
+
+-- 3) branches that hold any books by Ann Brown(withot using a nested subquery).
+
+
+mysql> SELECT DISTINCT b.branch FROM branchdetails as b, titlename as t
+    -> WHERE b.title = t.title && t.author = 'Anne Brown';
++--------+
+| branch |
++--------+
+| B1     |
+| B2     |
+| B3     |
++--------+
+3 rows in set, 1 warning (0.00 sec)
+
+-- 4) The total number of books held at each branch.
+
+
+mysql> SELECT branch, sum(copies) FROM branchdetails
+    -> GROUP BY branch;
++--------+-------------+
+| branch | sum(copies) |
++--------+-------------+
+| B1     |           6 |
+| B2     |           9 |
+| B3     |           9 |
++--------+-------------+
+3 rows in set (0.00 sec)
