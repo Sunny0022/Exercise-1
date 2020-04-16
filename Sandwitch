@@ -1,0 +1,116 @@
+-- CREATE TABLE tastes------
+
+CREATE TABLE TASTES(name VARCHAR(30), filling VARCHAR(30));
+INSERT INTO TASTES VALUES('Brown', 'Turkey');
+INSERT INTO TASTES VALUES('Brown', 'Beef');
+INSERT INTO TASTES VALUES('Brown', 'Ham');
+INSERT INTO TASTES VALUES('Jones', 'Cheese');
+INSERT INTO TASTES VALUES('Green', 'Beef');
+INSERT INTO TASTES VALUES('Green', 'Turkey');
+INSERT INTO TASTES VALUES('Green', 'Cheese');
+SELECT * FROM TASTES;
+
++-------+---------+
+| name  | filling |
++-------+---------+
+| Brown | Turkey  |
+| Brown | Beef    |
+| Brown | Ham     |
+| Jones | Cheese  |
+| Green | Beef    |
+| Green | Turkey  |
+| Green | Cheese  |
++-------+---------+
+7 rows in set (0.00 sec)
+
+-- CREATE table locations---
+
+CREATE TABLE locations(Lname VARCHAR(30), phone VARCHAR(30), Address VARCHAR(30));
+INSERT INTO locations VALUES('Lincoln', '683 4523', 'Lincoln Place');
+INSERT INTO locations VALUES('ONeills', '674 2134', 'Pearse St');
+INSERT INTO locations VALUES('Old Nag', '767 8132', 'Dame St');
+INSERT INTO locations VALUES('Buttery', '702 3421', 'College ST');
+SELECT * FROM locations;
+
+---------+----------+---------------+
+| Lname   | phone    | Address       |
++---------+----------+---------------+
+| Lincoln | 683 4523 | Lincoln Place |
+| ONeills | 674 2134 | Pearse St     |
+| Old Nag | 767 8132 | Dame St       |
+| Buttery | 702 3421 | College ST    |
++---------+----------+---------------+
+4 rows in set (0.00 sec)
+
+-- CREATE TABLE sandwitches
+
+CREATE TABLE sandwiches(Location VARCHAR(30), Bread VARCHAR(30), Filling VARCHAR(30), Price FLOAT(3,2));
+INSERT INTO sandwiches VALUES('Lincoln', 'Rye', 'Ham', 1.25);
+INSERT INTO sandwiches VALUES('ONeills', 'White', 'Cheese', 1.20);
+INSERT INTO sandwiches VALUES('ONeills', 'Whole', 'Ham', 1.25);
+INSERT INTO sandwiches VALUES('Old Nag', 'Rye', 'Beef', 1.35);
+INSERT INTO sandwiches VALUES('Buttery', 'White', 'Cheese', 1.00);
+INSERT INTO sandwiches VALUES('ONeills', 'White', 'Turkey', 1.35);
+INSERT INTO sandwiches VALUES('Buttery', 'White', 'Ham', 1.10);
+INSERT INTO sandwiches VALUES('Lincoln', 'Rye', 'Beef', 1.35);
+INSERT INTO sandwiches VALUES('Lincoln', 'White', 'Ham', 1.30);
+INSERT INTO sandwiches VALUES('Old Nag', 'Rye', 'Ham', 1.40);
+SELECT * FROM sandwiches;
+
+Location | Bread | Filling | Price |
++----------+-------+---------+-------+
+| Lincoln  | Rye   | Ham     |  1.25 |
+| ONeills  | White | Cheese  |  1.20 |
+| ONeills  | Whole | Ham     |  1.25 |
+| Old Nag  | Rye   | Beef    |  1.35 |
+| Buttery  | White | Cheese  |  1.00 |
+| ONeills  | White | Turkey  |  1.35 |
+| Buttery  | White | Ham     |  1.10 |
+| Lincoln  | Rye   | Beef    |  1.35 |
+| Lincoln  | White | Ham     |  1.30 |
+| Old Nag  | Rye   | Ham     |  1.40 |
++----------+-------+---------+-------+
+10 rows in set (0.00 sec)
+
+--1) Places where Jones can eat(using a nested subquery)
+
+
+mysql> SELECT DISTINCT s.Location FROM sandwiches as s
+    -> JOIN TASTES as t on (t.name = 'Jones' && t.filling = s.Filling);
++----------+
+| Location |
++----------+
+| ONeills  |
+| Buttery  |
++----------+
+2 rows in set, 1 warning (0.00 sec)
+
+--2) Places where Jones can eat(without using a nested subquery)
+
+mysql> SELECT DISTINCT Location FROM sandwiches
+    -> WHERE Filling in (SELECT filling FROM TASTES WHERE name = 'Jones');
++----------+
+| Location |
++----------+
+| ONeills  |
+| Buttery  |
++----------+
+2 rows in set (0.00 sec)
+
+--3) for each location number of people who can eat there
+
+
+mysql> SELECT s.Location, COUNT(DISTINCT t.name) as no_of_people FROM sandwiches as s
+    -> JOIN TASTES as t on (s.Filling = t.filling) GROUP BY s.Location;
++----------+--------------+
+| Location | no_of_people |
++----------+--------------+
+| Buttery  |            3 |
+| Lincoln  |            2 |
+| Old Nag  |            2 |
+| ONeills  |            3 |
++----------+--------------+
+4 rows in set (0.00 sec)
+
+ 
+ 
