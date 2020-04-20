@@ -44,10 +44,10 @@ SELECT * FROM locations;
 
 -- CREATE TABLE sandwitches
 
-CREATE TABLE sandwiches(Location VARCHAR(30), Bread VARCHAR(30), Filling VARCHAR(30), Price FLOAT(3,2));
-INSERT INTO sandwiches VALUES('Lincoln', 'Rye', 'Ham', 1.25);
-INSERT INTO sandwiches VALUES('ONeills', 'White', 'Cheese', 1.20);
-INSERT INTO sandwiches VALUES('ONeills', 'Whole', 'Ham', 1.25);
+CREATE TABLE sandwitches(Location VARCHAR(30), Bread VARCHAR(30), Filling VARCHAR(30), Price FLOAT(3,2));
+INSERT INTO sandwitches VALUES('Lincoln', 'Rye', 'Ham', 1.25);
+INSERT INTO sandwitches VALUES('ONeills', 'White', 'Cheese', 1.20);
+INSERT INTO sandwitches VALUES('ONeills', 'Whole', 'Ham', 1.25);
 INSERT INTO sandwitches VALUES('Old Nag', 'Rye', 'Beef', 1.35);
 INSERT INTO sandwitches VALUES('Buttery', 'White', 'Cheese', 1.00);
 INSERT INTO sandwitches VALUES('ONeills', 'White', 'Turkey', 1.35);
@@ -55,7 +55,7 @@ INSERT INTO sandwitches VALUES('Buttery', 'White', 'Ham', 1.10);
 INSERT INTO sandwitches VALUES('Lincoln', 'Rye', 'Beef', 1.35);
 INSERT INTO sandwitches VALUES('Lincoln', 'White', 'Ham', 1.30);
 INSERT INTO sandwitches VALUES('Old Nag', 'Rye', 'Ham', 1.40);
-SELECT * FROM sandwiches;
+SELECT * FROM sandwitches;
 
 Location | Bread | Filling | Price |
 +----------+-------+---------+-------+
