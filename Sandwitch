@@ -48,13 +48,13 @@ CREATE TABLE sandwiches(Location VARCHAR(30), Bread VARCHAR(30), Filling VARCHAR
 INSERT INTO sandwiches VALUES('Lincoln', 'Rye', 'Ham', 1.25);
 INSERT INTO sandwiches VALUES('ONeills', 'White', 'Cheese', 1.20);
 INSERT INTO sandwiches VALUES('ONeills', 'Whole', 'Ham', 1.25);
-INSERT INTO sandwiches VALUES('Old Nag', 'Rye', 'Beef', 1.35);
-INSERT INTO sandwiches VALUES('Buttery', 'White', 'Cheese', 1.00);
-INSERT INTO sandwiches VALUES('ONeills', 'White', 'Turkey', 1.35);
-INSERT INTO sandwiches VALUES('Buttery', 'White', 'Ham', 1.10);
-INSERT INTO sandwiches VALUES('Lincoln', 'Rye', 'Beef', 1.35);
-INSERT INTO sandwiches VALUES('Lincoln', 'White', 'Ham', 1.30);
-INSERT INTO sandwiches VALUES('Old Nag', 'Rye', 'Ham', 1.40);
+INSERT INTO sandwitches VALUES('Old Nag', 'Rye', 'Beef', 1.35);
+INSERT INTO sandwitches VALUES('Buttery', 'White', 'Cheese', 1.00);
+INSERT INTO sandwitches VALUES('ONeills', 'White', 'Turkey', 1.35);
+INSERT INTO sandwitches VALUES('Buttery', 'White', 'Ham', 1.10);
+INSERT INTO sandwitches VALUES('Lincoln', 'Rye', 'Beef', 1.35);
+INSERT INTO sandwitches VALUES('Lincoln', 'White', 'Ham', 1.30);
+INSERT INTO sandwitches VALUES('Old Nag', 'Rye', 'Ham', 1.40);
 SELECT * FROM sandwiches;
 
 Location | Bread | Filling | Price |
@@ -74,7 +74,7 @@ Location | Bread | Filling | Price |
 
 --1) Places where Jones can eat(using a nested subquery)
 
-mysql> SELECT DISTINCT Location FROM sandwiches
+mysql> SELECT DISTINCT Location FROM sandwitches
     -> WHERE Filling in (SELECT filling FROM TASTES WHERE name = 'Jones');
 
 +----------+
@@ -87,7 +87,7 @@ mysql> SELECT DISTINCT Location FROM sandwiches
 
 --2) Places where Jones can eat(without using a nested subquery)
 
-mysql> SELECT DISTINCT s.Location FROM sandwiches as s
+mysql> SELECT DISTINCT s.Location FROM sandwitches as s
     -> JOIN TASTES as t on (t.name = 'Jones' && t.filling = s.Filling);
     
 +----------+
@@ -101,7 +101,7 @@ mysql> SELECT DISTINCT s.Location FROM sandwiches as s
 --3) for each location number of people who can eat there
 
 
-mysql> SELECT s.Location, COUNT(DISTINCT t.name) as no_of_people FROM sandwiches as s
+mysql> SELECT s.Location, COUNT(DISTINCT t.name) as no_of_people FROM sandwitches as s
     -> JOIN TASTES as t on (s.Filling = t.filling) GROUP BY s.Location;
 +----------+--------------+
 | Location | no_of_people |
