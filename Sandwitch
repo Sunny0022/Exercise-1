@@ -74,9 +74,9 @@ Location | Bread | Filling | Price |
 
 --1) Places where Jones can eat(using a nested subquery)
 
+mysql> SELECT DISTINCT Location FROM sandwiches
+    -> WHERE Filling in (SELECT filling FROM TASTES WHERE name = 'Jones');
 
-mysql> SELECT DISTINCT s.Location FROM sandwiches as s
-    -> JOIN TASTES as t on (t.name = 'Jones' && t.filling = s.Filling);
 +----------+
 | Location |
 +----------+
@@ -87,8 +87,9 @@ mysql> SELECT DISTINCT s.Location FROM sandwiches as s
 
 --2) Places where Jones can eat(without using a nested subquery)
 
-mysql> SELECT DISTINCT Location FROM sandwiches
-    -> WHERE Filling in (SELECT filling FROM TASTES WHERE name = 'Jones');
+mysql> SELECT DISTINCT s.Location FROM sandwiches as s
+    -> JOIN TASTES as t on (t.name = 'Jones' && t.filling = s.Filling);
+    
 +----------+
 | Location |
 +----------+
