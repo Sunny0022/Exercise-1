@@ -1,10 +1,10 @@
--- CREATE TABLE code--------
+-- CREATE TABLE branch--------
 
-CREATE TABLE code(bcode VARCHAR(10), Librarian VARCHAR(30), address VARCHAR(30));
-INSERT INTO code VALUES('B1', 'John Smith', '2 Anglesea Rd');
-INSERT INTO code VALUES('B2', 'Mary Jones', '34 Pearse Rd');
-INSERT INTO code VALUES('B3', 'Francis Owens', 'Grange X');
-SELECT * FROM code;
+CREATE TABLE Branch(bcode VARCHAR(10), Librarian VARCHAR(30), address VARCHAR(30));
+INSERT INTO Branch VALUES('B1', 'John Smith', '2 Anglesea Rd');
+INSERT INTO Branch VALUES('B2', 'Mary Jones', '34 Pearse Rd');
+INSERT INTO Branch VALUES('B3', 'Francis Owens', 'Grange X');
+SELECT * FROM Branch;
 
 bcode | Librarian     | address       |
 +-------+---------------+---------------+
@@ -14,15 +14,15 @@ bcode | Librarian     | address       |
 +-------+---------------+---------------+
 3 rows in set (0.00 sec)
 
---- CREATE TABLE titlename------
+--- CREATE TABLE titles------
 
-CREATE TABLE titlename(title VARCHAR(30), author VARCHAR(30), publisher VARCHAR(30));
-INSERT INTO titlename VALUES('Susannah', 'Anne Brown', 'Macmillan');
-INSERT INTO titlename VALUES('How to Fish', 'Amy Fly', 'Stop Press');
-INSERT INTO titlename VALUES('A History of Dublin', 'David Little', 'Wiley');
-INSERT INTO titlename VALUES('Computers', 'Blaisse Pascal', 'Applewoods');
-INSERT INTO titlename VALUES('The wife', 'Anne Brown', 'Macmillan');
-SELECT * FROM titlename;
+CREATE TABLE titles(title VARCHAR(30), author VARCHAR(30), publisher VARCHAR(30));
+INSERT INTO titles VALUES('Susannah', 'Anne Brown', 'Macmillan');
+INSERT INTO titles VALUES('How to Fish', 'Amy Fly', 'Stop Press');
+INSERT INTO titles VALUES('A History of Dublin', 'David Little', 'Wiley');
+INSERT INTO titles VALUES('Computers', 'Blaisse Pascal', 'Applewoods');
+INSERT INTO titles VALUES('The wife', 'Anne Brown', 'Macmillan');
+SELECT * FROM titles;
 
 +---------------------+----------------+------------+
 | title               | author         | publisher  |
@@ -35,18 +35,19 @@ SELECT * FROM titlename;
 +---------------------+----------------+------------+
 5 rows in set (0.00 sec)
 
-CREATE TABLE branchdetails(branch VARCHAR(30), title VARCHAR(30), copies INT(32));
-INSERT INTO branchdetails VALUES('B1', 'Susannah', 3);
-INSERT INTO branchdetails VALUES('B1', 'How to', 2);
-INSERT INTO branchdetails VALUES('B1', 'A hist', 1);
-INSERT INTO branchdetails VALUES('B2', 'How to', 4);
-INSERT INTO branchdetails VALUES('B2', 'Computers', 2);
-INSERT INTO branchdetails VALUES('B2', 'The Wife', 3);
-INSERT INTO branchdetails VALUES('B3', 'A hist', 1);
-INSERT INTO branchdetails VALUES('B3', 'Computers', 4);
-INSERT INTO branchdetails VALUES('B3', 'Susannah', 3);
-INSERT INTO branchdetails VALUES('B3', 'The Wife', 1);
-SELECT * FROM branchdetails;
+-- Create table holdings--------
+CREATE TABLE Holdings(branch VARCHAR(30), title VARCHAR(30), copies INT(32));
+INSERT INTO Holdings VALUES('B1', 'Susannah', 3);
+INSERT INTO Holdings VALUES('B1', 'How to', 2);
+INSERT INTO Holdings VALUES('B1', 'A hist', 1);
+INSERT INTO Holdings VALUES('B2', 'How to', 4);
+INSERT INTO Holdings VALUES('B2', 'Computers', 2);
+INSERT INTO Holdings VALUES('B2', 'The Wife', 3);
+INSERT INTO Holdings VALUES('B3', 'A hist', 1);
+INSERT INTO Holdings VALUES('B3', 'Computers', 4);
+INSERT INTO Holdings VALUES('B3', 'Susannah', 3);
+INSERT INTO Holdings VALUES('B3', 'The Wife', 1);
+SELECT * FROM Holdings;
 
 +--------+-----------+--------+
 | branch | title     | copies |
@@ -66,7 +67,7 @@ SELECT * FROM branchdetails;
 
 -- 1) the names of all library books published by Macmillan-----
 
-mysql> SELECT title FROM titlename WHERE publisher = 'Macmillan';
+mysql> SELECT title FROM titles WHERE publisher = 'Macmillan';
 +----------+
 | title    |
 +----------+
@@ -79,8 +80,8 @@ mysql> SELECT title FROM titlename WHERE publisher = 'Macmillan';
 -- 2) branches that hold any books by Ann Brown(using a nested subquery).
 
 
-mysql>  SELECT DISTINCT branch FROM branchdetails
-    ->  WHERE title IN (SELECT title FROM titlename where author = 'Anne Brown');
+mysql>  SELECT DISTINCT branch FROM holdings
+    ->  WHERE title IN (SELECT title FROM titles where author = 'Anne Brown');
 +--------+
 | branch |
 +--------+
@@ -94,8 +95,8 @@ mysql>  SELECT DISTINCT branch FROM branchdetails
 -- 3) branches that hold any books by Ann Brown(withot using a nested subquery).
 
 
-mysql> SELECT DISTINCT b.branch FROM branchdetails as b, titlename as t
-    -> WHERE b.title = t.title && t.author = 'Anne Brown';
+mysql> SELECT DISTINCT h.branch FROM holdings as h, titles as t
+    -> WHERE h.title = t.title && t.author = 'Anne Brown';
 +--------+
 | branch |
 +--------+
@@ -108,7 +109,7 @@ mysql> SELECT DISTINCT b.branch FROM branchdetails as b, titlename as t
 -- 4) The total number of books held at each branch.
 
 
-mysql> SELECT branch, sum(copies) FROM branchdetails
+mysql> SELECT branch, sum(copies) FROM holdings
     -> GROUP BY branch;
 +--------+-------------+
 | branch | sum(copies) |
